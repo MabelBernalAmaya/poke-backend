@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: poke-core-system
+
+  threads:
+    virtual:
+      enabled: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pokedb
+    username: pokeuser
+    password: pokepassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/pokelogs
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
