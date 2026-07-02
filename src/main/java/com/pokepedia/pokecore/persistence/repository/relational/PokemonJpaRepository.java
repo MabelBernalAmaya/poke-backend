@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PokemonJpaRepository extends JpaRepository<PokemonEntity, Long> {
-
+    boolean existsByNationalNumber(Integer nationalNumber);
 }
