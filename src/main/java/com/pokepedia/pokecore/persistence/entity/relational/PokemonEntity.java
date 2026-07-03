@@ -35,6 +35,7 @@ public class PokemonEntity {
             joinColumns = @JoinColumn(name = "pokemon_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id")
     )
+     @Builder.Default
     private List<TypeEntity> types = new ArrayList<>();
 
     // CORRECTO: OneToOne con LAZY (evita carga innecesaria de stats)
