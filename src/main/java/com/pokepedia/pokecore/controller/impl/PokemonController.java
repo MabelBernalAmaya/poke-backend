@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,7 @@ public class PokemonController implements PokemonApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PokemonResponse> create(PokemonRequest request) {
         Pokemon created = pokemonService.create(mapper.toDomain(request));
         return ResponseEntity.ok(mapper.toResponse(created));
