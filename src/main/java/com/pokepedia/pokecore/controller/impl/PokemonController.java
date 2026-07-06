@@ -22,12 +22,17 @@ public class PokemonController implements PokemonApi {
 
     @Override
     public ResponseEntity<Page<PokemonResponse>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(pokemonService.findAll(pageable).map(mapper::toResponse));
+        return ResponseEntity.ok(
+                pokemonService.findAll(pageable)
+                        .map(mapper::toResponse)
+        );
     }
 
     @Override
     public ResponseEntity<PokemonResponse> findById(Long id) {
-        return ResponseEntity.ok(mapper.toResponse(pokemonService.findById(id)));
+        return ResponseEntity.ok(
+                mapper.toResponse(pokemonService.findById(id))
+        );
     }
 
     @Override
@@ -35,5 +40,19 @@ public class PokemonController implements PokemonApi {
     public ResponseEntity<PokemonResponse> create(PokemonRequest request) {
         Pokemon created = pokemonService.create(mapper.toDomain(request));
         return ResponseEntity.ok(mapper.toResponse(created));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<PokemonResponse> update(Long id, PokemonRequest request) {
+        Pokemon updated = pokemonService.update(id, mapper.toDomain(request));
+        return ResponseEntity.ok(mapper.toResponse(updated));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> delete(Long id) {
+        pokemonService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

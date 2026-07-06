@@ -30,8 +30,14 @@ public class PokemonPersistenceAdapter implements PokemonPersistencePort {
     }
 
     @Override
-    public boolean existsByNationalNumber(Integer number) {
-        return repository.existsByNationalNumber(number);
+    public Optional<Pokemon> findByNationalNumber(Integer nationalNumber) {
+        return repository.findByNationalNumber(nationalNumber)
+                .map(mapper::toDomain);
+    }
+
+    @Override
+    public boolean existsByNationalNumber(Integer nationalNumber) {
+        return repository.existsByNationalNumber(nationalNumber);
     }
 
     @Override
