@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Service
@@ -89,5 +89,9 @@ public class PokemonServiceImpl implements PokemonService {
                 .orElseThrow(() -> new ResourceNotFoundException("Pokemon", "id", id));
 
         pokemonPort.deleteById(id);
+    }
+    @Override
+    public List<Pokemon> filterByType(String type) {
+        return pokemonPort.filterByType(type);
     }
 }

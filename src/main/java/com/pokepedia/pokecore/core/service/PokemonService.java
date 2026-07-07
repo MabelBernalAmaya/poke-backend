@@ -12,5 +12,5 @@ public interface PokemonService {
     Pokemon create(Pokemon pokemon);
     Pokemon update(Long id, Pokemon pokemon);
     void delete(Long id);
-
+    List<Pokemon> filterByType(String type);
 }

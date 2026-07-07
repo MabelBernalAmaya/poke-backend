@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -49,5 +50,12 @@ public class PokemonPersistenceAdapter implements PokemonPersistencePort {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Pokemon> filterByType(String type) {
+        return repository.findByTypes_NameIgnoreCase(type).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

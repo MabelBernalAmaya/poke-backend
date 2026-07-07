@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 @Tag(name = "Pokemon", description = "Gestión del catálogo de Pokémon")
 @RequestMapping("/v1/pokemon")
 public interface PokemonApi {
@@ -46,4 +46,7 @@ public interface PokemonApi {
     @Operation(summary = "Eliminar Pokémon", description = "Solo ADMIN")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
+    @Operation(summary = "Filtrar Pokémon por tipo")
+    @GetMapping("/filter")
+    ResponseEntity<List<PokemonResponse>> filterByType(@RequestParam String type);
 }

@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -84,5 +85,17 @@ class PokemonPersistenceAdapterTest {
         adapter.deleteById(1L);
 
         verify(repository).deleteById(1L);
+    }
+
+    @Test
+    void filterByType_delegatesToRepositoryAndMapsResults() {
+        when(repository.findByTypes_NameIgnoreCase("electric"))
+                .thenReturn(List.of(entity));
+        when(mapper.toDomain(entity)).thenReturn(domain);
+
+        List<Pokemon> result = adapter.filterByType("electric");
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getName()).isEqualTo("Pikachu");
     }
 }

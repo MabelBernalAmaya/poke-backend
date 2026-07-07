@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PokemonController implements PokemonApi {
@@ -48,11 +48,17 @@ public class PokemonController implements PokemonApi {
         Pokemon updated = pokemonService.update(id, mapper.toDomain(request));
         return ResponseEntity.ok(mapper.toResponse(updated));
     }
-
+    @Override
+    public ResponseEntity<List<PokemonResponse>> filterByType(String type) {
+        List<Pokemon> pokemons = pokemonService.filterByType(type);
+        return ResponseEntity.ok(pokemons.stream().map(mapper::toResponse).toList());
+    }
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(Long id) {
         pokemonService.delete(id);
         return ResponseEntity.noContent().build();
+
+
     }
 }
