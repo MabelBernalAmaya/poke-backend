@@ -71,4 +71,37 @@ class PokemonControllerTest {
                         .content(objectMapper.writeValueAsString(invalid)))
                 .andExpect(status().isBadRequest());
     }
+    @Test
+    void findAll_returns200() throws Exception {
+        Pokemon pokemon = Pokemon.builder().id(1L).name("Pikachu").build();
+        PokemonResponse response = new PokemonResponse(1L, 25, "Pikachu",
+                List.of("Electric"), "Kanto", null);
+        org.springframework.data.domain.Page<Pokemon> page =
+                new org.springframework.data.domain.PageImpl<>(List.of(pokemon));
+
+        when(pokemonService.findAll(org.mockito.ArgumentMatchers.any())).thenReturn(page);
+        when(mapper.toResponse(pokemon)).thenReturn(response);
+
+        mockMvc.perform(get("/v1/pokemon"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].name").value("Pikachu"));
+    }
+
+    @Test
+    void create_withValidBody_returns200() throws Exception {
+        PokemonRequest request = new PokemonRequest(25, "Pikachu", List.of("Electric"), 1L);
+        Pokemon pokemon = Pokemon.builder().id(1L).name("Pikachu").build();
+        PokemonResponse response = new PokemonResponse(1L, 25, "Pikachu",
+                List.of("Electric"), "Kanto", null);
+
+        when(mapper.toDomain(request)).thenReturn(pokemon);
+        when(pokemonService.create(pokemon)).thenReturn(pokemon);
+        when(mapper.toResponse(pokemon)).thenReturn(response);
+
+        mockMvc.perform(post("/v1/pokemon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Pikachu"));
+    }
 }
