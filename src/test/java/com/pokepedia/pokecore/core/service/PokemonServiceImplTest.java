@@ -4,6 +4,7 @@ import com.pokepedia.pokecore.core.exception.DuplicateResourceException;
 import com.pokepedia.pokecore.core.exception.ResourceNotFoundException;
 import com.pokepedia.pokecore.core.model.Pokemon;
 import com.pokepedia.pokecore.core.port.PokemonPersistencePort;
+import com.pokepedia.pokecore.persistence.repository.document.PokemonViewMongoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,9 @@ class PokemonServiceImplTest {
     @Mock
     private PokemonPersistencePort pokemonPort;
 
+    @Mock
+    private PokemonViewMongoRepository viewRepository;
+
     @InjectMocks
     private PokemonServiceImpl service;
 
@@ -42,6 +46,7 @@ class PokemonServiceImplTest {
     @DisplayName("findById: debe retornar el Pokemon cuando existe")
     void findById_whenExists_returnsPokemon() {
         when(pokemonPort.findById(1L)).thenReturn(Optional.of(pikachu));
+        when(viewRepository.save(any())).thenReturn(null);
 
         Pokemon result = service.findById(1L);
 
@@ -87,6 +92,7 @@ class PokemonServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> service.delete(99L));
         verify(pokemonPort, never()).deleteById(any());
     }
+
     @Test
     @DisplayName("update: debe actualizar manteniendo el id original")
     void update_whenExists_updatesAndKeepsId() {
@@ -116,6 +122,7 @@ class PokemonServiceImplTest {
     @DisplayName("delete: debe eliminar cuando existe")
     void delete_whenExists_deletes() {
         when(pokemonPort.findById(1L)).thenReturn(Optional.of(pikachu));
+
 
         service.delete(1L);
 
