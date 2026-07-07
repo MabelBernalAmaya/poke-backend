@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import static org.mockito.ArgumentMatchers.any;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,5 +86,39 @@ class PokemonServiceImplTest {
 
         assertThrows(ResourceNotFoundException.class, () -> service.delete(99L));
         verify(pokemonPort, never()).deleteById(any());
+    }
+    @Test
+    @DisplayName("update: debe actualizar manteniendo el id original")
+    void update_whenExists_updatesAndKeepsId() {
+        Pokemon existente = Pokemon.builder().id(1L).nationalNumber(25).name("Pikachu").build();
+        Pokemon cambios = Pokemon.builder().nationalNumber(25).name("Raichu").build();
+        Pokemon actualizado = cambios.toBuilder().id(1L).build();
+
+        when(pokemonPort.findById(1L)).thenReturn(Optional.of(existente));
+        when(pokemonPort.save(any())).thenReturn(actualizado);
+
+        Pokemon result = service.update(1L, cambios);
+
+        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getName()).isEqualTo("Raichu");
+    }
+
+    @Test
+    @DisplayName("update: debe lanzar ResourceNotFoundException si no existe")
+    void update_whenNotFound_throws() {
+        when(pokemonPort.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.update(99L, pikachu));
+    }
+
+    @Test
+    @DisplayName("delete: debe eliminar cuando existe")
+    void delete_whenExists_deletes() {
+        when(pokemonPort.findById(1L)).thenReturn(Optional.of(pikachu));
+
+        service.delete(1L);
+
+        verify(pokemonPort).deleteById(1L);
     }
 }
