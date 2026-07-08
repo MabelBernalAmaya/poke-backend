@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
@@ -22,6 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@TestPropertySource(properties = {
+        "spring.security.oauth2.client.registration.google.client-id=test-client",
+        "spring.security.oauth2.client.registration.google.client-secret=test-secret",
+        "app.jwt.secret=test-secret"
+})
 class AuthControllerTest {
 
     @Autowired
@@ -44,9 +50,17 @@ class AuthControllerTest {
 
     @Test
     void register_withValidBody_returns200() throws Exception {
-        RegisterRequest request = new RegisterRequest("trainer1", "trainer1@test.com", "password123");
-        when(authService.register("trainer1", "trainer1@test.com", "password123"))
-                .thenReturn("fake-token");
+        RegisterRequest request = new RegisterRequest(
+                "trainer1",
+                "trainer1@test.com",
+                "password123"
+        );
+
+        when(authService.register(
+                "trainer1",
+                "trainer1@test.com",
+                "password123"
+        )).thenReturn("fake-token");
 
         mockMvc.perform(post("/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +71,11 @@ class AuthControllerTest {
 
     @Test
     void register_withInvalidBody_returns400() throws Exception {
-        RegisterRequest invalid = new RegisterRequest("", "not-an-email", "123");
+        RegisterRequest invalid = new RegisterRequest(
+                "",
+                "not-an-email",
+                "123"
+        );
 
         mockMvc.perform(post("/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,9 +85,15 @@ class AuthControllerTest {
 
     @Test
     void login_withValidBody_returns200() throws Exception {
-        LoginRequest request = new LoginRequest("trainer1@test.com", "password123");
-        when(authService.login("trainer1@test.com", "password123"))
-                .thenReturn("fake-token");
+        LoginRequest request = new LoginRequest(
+                "trainer1@test.com",
+                "password123"
+        );
+
+        when(authService.login(
+                "trainer1@test.com",
+                "password123"
+        )).thenReturn("fake-token");
 
         mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
