@@ -10,4 +10,5 @@ public interface TeamService {
     List<EquipoResponse> listByUsuario(Long usuarioId);
     EquipoResponse update(Long equipoId, Long usuarioId, EquipoRequest request);
     void delete(Long equipoId, Long usuarioId);
+    String exportToText(Long equipoId, Long usuarioId);
 }

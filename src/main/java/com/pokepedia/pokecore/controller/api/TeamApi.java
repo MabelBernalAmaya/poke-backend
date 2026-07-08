@@ -30,4 +30,8 @@ public interface TeamApi {
     @Operation(summary = "Eliminar un equipo")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id, Authentication authentication);
+
+    @Operation(summary = "Exportar equipo a formato texto")
+    @GetMapping("/{id}/export")
+    ResponseEntity<String> export(@PathVariable Long id, Authentication authentication);
 }

@@ -47,4 +47,9 @@ public class TeamController implements TeamApi {
         teamService.delete(id, getUsuarioId(authentication));
         return ResponseEntity.noContent().build();
     }
+    @Override
+    public ResponseEntity<String> export(Long id, Authentication authentication) {
+        String texto = teamService.exportToText(id, getUsuarioId(authentication));
+        return ResponseEntity.ok(texto);
+    }
 }

@@ -25,7 +25,7 @@ public class TeamServiceImpl implements TeamService {
 
     private final EquipoJpaRepository equipoRepository;
     private final EquipoPokemonJpaRepository equipoPokemonRepository;
-
+    private final com.pokepedia.pokecore.core.port.PokemonPersistencePort pokemonPort;
     @Override
     @Transactional
     public EquipoResponse create(Long usuarioId, EquipoRequest request) {
@@ -117,5 +117,32 @@ public class TeamServiceImpl implements TeamService {
 
     private EquipoResponse toResponse(EquipoEntity equipo, List<Long> pokemonIds) {
         return new EquipoResponse(equipo.getId(), equipo.getNombre(), pokemonIds, equipo.getCreatedAt());
+    }
+    @Override
+    public String exportToText(Long equipoId, Long usuarioId) {
+        EquipoEntity equipo = equipoRepository.findById(equipoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipo", "id", equipoId));
+
+        validarPropietario(equipo, usuarioId);
+
+        List<Long> pokemonIds = obtenerPokemonIds(equipoId);
+        StringBuilder texto = new StringBuilder();
+        texto.append("Equipo: ").append(equipo.getNombre()).append("\n\n");
+
+        for (Long pokemonId : pokemonIds) {
+            pokemonPort.findById(pokemonId).ifPresent(pokemon -> {
+                texto.append(pokemon.getName()).append("\n");
+                texto.append("Tipo: ").append(String.join("/", pokemon.getTypes())).append("\n");
+                if (pokemon.getStats() != null) {
+                    texto.append("HP: ").append(pokemon.getStats().getHp())
+                            .append(" | ATK: ").append(pokemon.getStats().getAttack())
+                            .append(" | DEF: ").append(pokemon.getStats().getDefense())
+                            .append("\n");
+                }
+                texto.append("\n");
+            });
+        }
+
+        return texto.toString();
     }
 }
