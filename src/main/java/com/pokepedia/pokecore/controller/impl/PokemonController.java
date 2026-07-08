@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import com.pokepedia.pokecore.controller.dto.response.PokemonComparisonResponse;
 @RestController
 @RequiredArgsConstructor
 public class PokemonController implements PokemonApi {
@@ -60,5 +61,15 @@ public class PokemonController implements PokemonApi {
         return ResponseEntity.noContent().build();
 
 
+    }
+    @Override
+    public ResponseEntity<PokemonComparisonResponse> compare(Long id1, Long id2) {
+        if (id1.equals(id2)) {
+            throw new com.pokepedia.pokecore.core.exception.BusinessException(
+                    "Selecciona una especie distinta para comparar", "SAME_POKEMON_COMPARISON");
+        }
+        Pokemon p1 = pokemonService.findById(id1);
+        Pokemon p2 = pokemonService.findById(id2);
+        return ResponseEntity.ok(new PokemonComparisonResponse(mapper.toResponse(p1), mapper.toResponse(p2)));
     }
 }

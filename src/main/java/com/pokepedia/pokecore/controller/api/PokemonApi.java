@@ -1,6 +1,7 @@
 package com.pokepedia.pokecore.controller.api;
 
 import com.pokepedia.pokecore.controller.dto.request.PokemonRequest;
+import com.pokepedia.pokecore.controller.dto.response.PokemonComparisonResponse;
 import com.pokepedia.pokecore.controller.dto.response.PokemonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 @Tag(name = "Pokemon", description = "Gestión del catálogo de Pokémon")
 @RequestMapping("/v1/pokemon")
 public interface PokemonApi {
@@ -46,7 +48,12 @@ public interface PokemonApi {
     @Operation(summary = "Eliminar Pokémon", description = "Solo ADMIN")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
+
     @Operation(summary = "Filtrar Pokémon por tipo")
     @GetMapping("/filter")
     ResponseEntity<List<PokemonResponse>> filterByType(@RequestParam String type);
+
+    @Operation(summary = "Comparar dos Pokémon por sus stats")
+    @GetMapping("/compare")
+    ResponseEntity<PokemonComparisonResponse> compare(@RequestParam Long id1, @RequestParam Long id2);
 }
