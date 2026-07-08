@@ -1,0 +1,69 @@
+name: CI - Build y Tests
+
+# Se ejecuta cada vez que se hace push o pull request contra develop o main
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # Servicios auxiliares: se levantan como contenedores antes de correr los tests
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: pokedb
+          POSTGRES_USER: pokeuser
+          POSTGRES_PASSWORD: pokepassword
+        ports:
+          - 5432:5432
+        # Espera hasta que Postgres esté listo antes de continuar
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Instala Java 21 (el mismo que usas en local)
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. Corre el build completo, incluyendo jacoco:check
+      - name: Build y tests con Maven (incluye JaCoCo check)
+        env:
+          # Estos valores vienen de GitHub Secrets, NO están escritos aquí en texto plano
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          # Estos coinciden exactamente con application.yml (mismos nombres y valores que en local)
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/pokedb
+          SPRING_DATASOURCE_USERNAME: pokeuser
+          SPRING_DATASOURCE_PASSWORD: pokepassword
+          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/pokelogs
+        run: mvn clean verify
+
+      # 4. (Opcional) Sube el reporte de JaCoCo como artefacto descargable
+      - name: Subir reporte de JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
