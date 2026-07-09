@@ -72,4 +72,9 @@ public class PokemonController implements PokemonApi {
         Pokemon p2 = pokemonService.findById(id2);
         return ResponseEntity.ok(new PokemonComparisonResponse(mapper.toResponse(p1), mapper.toResponse(p2)));
     }
+    @Override
+    public ResponseEntity<List<PokemonResponse>> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy) {
+        List<Pokemon> resultado = pokemonService.filterAdvanced(type, minStat, maxStat, sortBy);
+        return ResponseEntity.ok(resultado.stream().map(mapper::toResponse).toList());
+    }
 }

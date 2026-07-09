@@ -56,4 +56,12 @@ public interface PokemonApi {
     @Operation(summary = "Comparar dos Pokémon por sus stats")
     @GetMapping("/compare")
     ResponseEntity<PokemonComparisonResponse> compare(@RequestParam Long id1, @RequestParam Long id2);
+    @Operation(summary = "Filtro avanzado: tipo, rango de stats y ordenamiento")
+    @GetMapping("/filter/advanced")
+    ResponseEntity<List<PokemonResponse>> filterAdvanced(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Integer minStat,
+            @RequestParam(required = false) Integer maxStat,
+            @RequestParam(required = false) String sortBy
+    );
 }

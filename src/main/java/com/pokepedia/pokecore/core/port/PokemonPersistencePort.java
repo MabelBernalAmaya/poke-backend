@@ -20,4 +20,5 @@ public interface PokemonPersistencePort {
 
     void deleteById(Long id);
     List<Pokemon> filterByType(String type);
+    List<Pokemon> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy);
 }

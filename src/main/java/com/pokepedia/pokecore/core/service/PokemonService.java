@@ -13,4 +13,5 @@ public interface PokemonService {
     Pokemon update(Long id, Pokemon pokemon);
     void delete(Long id);
     List<Pokemon> filterByType(String type);
+    List<Pokemon> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy);
 }

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +57,21 @@ public class PokemonPersistenceAdapter implements PokemonPersistencePort {
         return repository.findByTypes_NameIgnoreCase(type).stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+    @Override
+    public List<Pokemon> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy) {
+        List<Pokemon> resultado = repository.findByFilters(type, minStat, maxStat).stream()
+                .map(mapper::toDomain)
+                .toList();
+
+        Comparator<Pokemon> comparador = switch (sortBy == null ? "id" : sortBy.toLowerCase()) {
+            case "alfabetico" -> Comparator.comparing(Pokemon::getName);
+            case "velocidad" -> Comparator.comparing(
+                    (Pokemon p) -> p.getStats() != null ? p.getStats().getSpeed() : 0
+            ).reversed();
+            default -> Comparator.comparing(Pokemon::getNationalNumber);
+        };
+
+        return resultado.stream().sorted(comparador).toList();
     }
 }
