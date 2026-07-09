@@ -58,9 +58,10 @@ public class PokemonPersistenceAdapter implements PokemonPersistencePort {
                 .map(mapper::toDomain)
                 .toList();
     }
+
     @Override
-    public List<Pokemon> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy) {
-        List<Pokemon> resultado = repository.findByFilters(type, minStat, maxStat).stream()
+    public List<Pokemon> filterAdvanced(String type, String region, Integer minStat, Integer maxStat, String sortBy) {
+        List<Pokemon> resultado = repository.findByFilters(type, region, minStat, maxStat).stream()
                 .map(mapper::toDomain)
                 .toList();
 

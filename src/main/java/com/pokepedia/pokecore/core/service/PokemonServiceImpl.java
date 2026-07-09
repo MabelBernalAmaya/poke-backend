@@ -96,7 +96,7 @@ public class PokemonServiceImpl implements PokemonService {
 
     }
     @Override
-    public List<Pokemon> filterAdvanced(String type, Integer minStat, Integer maxStat, String sortBy) {
-        return pokemonPort.filterAdvanced(type, minStat, maxStat, sortBy);
+    public List<Pokemon> filterAdvanced(String type, String region, Integer minStat, Integer maxStat, String sortBy) {
+        return pokemonPort.filterAdvanced(type, region, minStat, maxStat, sortBy);
     }
 }

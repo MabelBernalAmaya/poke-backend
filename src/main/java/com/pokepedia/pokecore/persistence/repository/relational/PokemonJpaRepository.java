@@ -35,12 +35,15 @@ public interface PokemonJpaRepository extends JpaRepository<PokemonEntity, Long>
         SELECT DISTINCT p FROM PokemonEntity p
         LEFT JOIN p.types t
         LEFT JOIN p.stats s
+        LEFT JOIN p.region r
         WHERE (:type IS NULL OR LOWER(t.name) = LOWER(:type))
+        AND (:region IS NULL OR LOWER(r.name) = LOWER(:region))
         AND (:minStat IS NULL OR (s.hp >= :minStat AND s.attack >= :minStat AND s.defense >= :minStat))
         AND (:maxStat IS NULL OR (s.hp <= :maxStat AND s.attack <= :maxStat AND s.defense <= :maxStat))
     """)
     List<PokemonEntity> findByFilters(
             @Param("type") String type,
+            @Param("region") String region,
             @Param("minStat") Integer minStat,
             @Param("maxStat") Integer maxStat
     );
