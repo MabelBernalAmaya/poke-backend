@@ -36,8 +36,8 @@ public interface PokemonJpaRepository extends JpaRepository<PokemonEntity, Long>
         LEFT JOIN p.types t
         LEFT JOIN p.stats s
         LEFT JOIN p.region r
-        WHERE (:type IS NULL OR LOWER(t.name) = LOWER(:type))
-        AND (:region IS NULL OR LOWER(r.name) = LOWER(:region))
+        WHERE (:type IS NULL OR LOWER(t.name) = LOWER(CAST(:type AS string)))
+        AND (:region IS NULL OR LOWER(r.name) = LOWER(CAST(:region AS string)))
         AND (:minStat IS NULL OR (s.hp >= :minStat AND s.attack >= :minStat AND s.defense >= :minStat))
         AND (:maxStat IS NULL OR (s.hp <= :maxStat AND s.attack <= :maxStat AND s.defense <= :maxStat))
     """)
