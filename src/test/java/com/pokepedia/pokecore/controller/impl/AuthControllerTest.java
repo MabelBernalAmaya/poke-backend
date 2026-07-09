@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokepedia.pokecore.controller.dto.request.LoginRequest;
 import com.pokepedia.pokecore.controller.dto.request.RegisterRequest;
 import com.pokepedia.pokecore.core.service.AuthService;
+import com.pokepedia.pokecore.core.service.PasswordResetService;
 import com.pokepedia.pokecore.security.JwtAuthFilter;
 import com.pokepedia.pokecore.security.JwtService;
 import com.pokepedia.pokecore.security.UserDetailsServiceImpl;
@@ -38,6 +39,9 @@ class AuthControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private PasswordResetService passwordResetService;
 
     @MockBean
     private JwtService jwtService;
