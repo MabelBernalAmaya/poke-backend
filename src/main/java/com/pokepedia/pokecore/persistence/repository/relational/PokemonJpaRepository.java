@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,19 +28,4 @@ public interface PokemonJpaRepository extends JpaRepository<PokemonEntity, Long>
 
     @EntityGraph(attributePaths = {"types", "region"})
     List<PokemonEntity> findByTypes_NameIgnoreCase(String typeName);
-
-    @EntityGraph(attributePaths = {"types", "stats", "region"})
-    @Query("""
-        SELECT DISTINCT p FROM PokemonEntity p
-        LEFT JOIN p.types t
-        LEFT JOIN p.stats s
-        WHERE (:type IS NULL OR LOWER(t.name) = LOWER(:type))
-        AND (:minStat IS NULL OR (s.hp >= :minStat AND s.attack >= :minStat AND s.defense >= :minStat))
-        AND (:maxStat IS NULL OR (s.hp <= :maxStat AND s.attack <= :maxStat AND s.defense <= :maxStat))
-    """)
-    List<PokemonEntity> findByFilters(
-            @Param("type") String type,
-            @Param("minStat") Integer minStat,
-            @Param("maxStat") Integer maxStat
-    );
 }
