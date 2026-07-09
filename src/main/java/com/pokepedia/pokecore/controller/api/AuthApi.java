@@ -10,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.pokepedia.pokecore.controller.dto.request.ForgotPasswordRequest;
+import com.pokepedia.pokecore.controller.dto.request.ResetPasswordRequest;
 @Tag(name = "Auth", description = "Registro y autenticación de usuarios")
 @RequestMapping("/v1/auth")
 public interface AuthApi {
@@ -22,4 +23,11 @@ public interface AuthApi {
     @Operation(summary = "Iniciar sesión con correo y contraseña")
     @PostMapping("/login")
     ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request);
+    @Operation(summary = "Solicitar recuperacion de contrasena")
+    @PostMapping("/forgot-password")
+    ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request);
+
+    @Operation(summary = "Restablecer contrasena con token")
+    @PostMapping("/reset-password")
+    ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request);
 }
