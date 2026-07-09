@@ -3,27 +3,29 @@ package com.pokepedia.pokecore.persistence.entity.relational;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "app_user")
+@Table(name = "password_reset_token")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class UserEntity {
+public class PasswordResetTokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String username;
+    @Column(name = "usuario_id", nullable = false)
+    private Long usuarioId;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String token;
 
-    @Column(name = "password_hash")
-    private String passwordHash;
+    @Column(name = "expires_at", nullable = false)
+    private LocalDateTime expiresAt;
 
-    @Column(nullable = false, length = 20)
-    private String role;
+    @Column(nullable = false)
+    private boolean used;
 }
