@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokedex API - Swagger autenticado</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <style>
+        body { margin: 0; background: #fafafa; }
+        #banner {
+            background: #1b1b1b;
+            color: #fff;
+            padding: 10px 20px;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+        #banner.ok { background: #1e5e2f; }
+        #banner.error { background: #7a1f1f; }
+    </style>
+</head>
+<body>
+<div id="banner">Autenticando con el token de Google...</div>
+<div id="swagger-ui"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+    function getTokenFromHash() {
+        var hash = window.location.hash.replace(/^#/, '');
+        var params = new URLSearchParams(hash);
+        return params.get('token');
+    }
+
+    var token = getTokenFromHash();
+    var banner = document.getElementById('banner');
+
+    var ui = SwaggerUIBundle({
+        url: '/v3/api-docs',
+        dom_id: '#swagger-ui',
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: 'BaseLayout',
+        onComplete: function () {
+            if (token) {
+                try {
+                    ui.preauthorizeApiKey('Bearer Authentication', token);
+                    banner.textContent = 'Autenticado con Google. Ya puedes probar los endpoints protegidos.';
+                    banner.className = 'ok';
+                } catch (e) {
+                    banner.textContent = 'No se pudo autorizar automaticamente. Token: ' + token;
+                    banner.className = 'error';
+                }
+            } else {
+                banner.textContent = 'No se encontro token en la URL. Autoriza manualmente con el boton Authorize.';
+                banner.className = 'error';
+            }
+        }
+    });
+</script>
+</body>
+</html>

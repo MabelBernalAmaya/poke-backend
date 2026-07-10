@@ -3,6 +3,7 @@ package com.pokepedia.pokecore.controller.api;
 import com.pokepedia.pokecore.controller.dto.request.EquipoRequest;
 import com.pokepedia.pokecore.controller.dto.response.EquipoResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "Teams", description = "Gestión de equipos Pokémon (Team Builder)")
+@SecurityRequirement(name = "Bearer Authentication")
 @RequestMapping("/v1/teams")
 public interface TeamApi {
 
