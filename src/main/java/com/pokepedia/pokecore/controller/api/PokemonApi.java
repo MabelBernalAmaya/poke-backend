@@ -5,6 +5,7 @@ import com.pokepedia.pokecore.controller.dto.response.PokemonComparisonResponse;
 import com.pokepedia.pokecore.controller.dto.response.PokemonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -35,17 +36,20 @@ public interface PokemonApi {
     ResponseEntity<PokemonResponse> findById(@PathVariable Long id);
 
     @Operation(summary = "Crear Pokémon", description = "Solo ADMIN")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping
     ResponseEntity<PokemonResponse> create(
             @Valid @RequestBody PokemonRequest request);
 
     @Operation(summary = "Actualizar Pokémon", description = "Solo ADMIN")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
     ResponseEntity<PokemonResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody PokemonRequest request);
 
     @Operation(summary = "Eliminar Pokémon", description = "Solo ADMIN")
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable Long id);
 
