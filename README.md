@@ -1,6 +1,6 @@
 # Poke Backend — API REST Pokédex (DOSW)
 
-Este es el backend de nuestro proyecto de Pokédex para el curso de DOSW. Es una API REST que maneja el catálogo de Pokémon, el login de usuarios (con JWT y también con Google), los favoritos de cada usuario y un "Team Builder" para armar equipos. El frontend es aparte, un prototipo hecho en Figma/Loveable, no está en este repo.
+Este es el backend de mi proyecto de Pokédex para el curso de DOSW. Es una API REST que maneja el catálogo de Pokémon, el login de usuarios (con JWT y también con Google), los favoritos de cada usuario y un "Team Builder" para armar equipos. El frontend es aparte, un prototipo hecho en Figma/Loveable, no está en este repo.
 
 **Producción:** `https://poke-backend-production-0b04.up.railway.app`
 **Swagger UI (ya autenticado con Google, sin copiar tokens a mano):** `https://poke-backend-production-0b04.up.railway.app/auth-swagger.html`
@@ -21,7 +21,7 @@ Este es el backend de nuestro proyecto de Pokédex para el curso de DOSW. Es una
 
 ## Tecnologías
 
-Estas son las tecnologías principales que usamos:
+Estas son las tecnologías principales que usé:
 
 | Categoría | Tecnología |
 |---|---|
@@ -33,19 +33,19 @@ Estas son las tecnologías principales que usamos:
 | Seguridad | Spring Security, JWT (jjwt), OAuth2 con Google |
 | Documentación de la API | springdoc-openapi / Swagger UI |
 | Mapeo entre objetos | MapStruct |
-| Cobertura de pruebas | JaCoCo (pedimos mínimo 70% de líneas cubiertas) |
+| Cobertura de pruebas | JaCoCo (pido mínimo 70% de líneas cubiertas) |
 | CI/CD | GitHub Actions |
 | Despliegue | Railway |
 
 ## Arquitectura
 
-Usamos arquitectura hexagonal (puertos y adaptadores) y, dentro de la capa que recibe las peticiones HTTP, aplicamos también el patrón MVC. La idea de hexagonal es que el dominio (o sea, las reglas de negocio) no dependa de Spring ni de JPA ni de nada de eso. El core no sabe que existe una base de datos: solo declara qué necesita (eso es un puerto), y quien se encarga de conectarse a la base de datos real es un adaptador aparte.
+Usé arquitectura hexagonal (puertos y adaptadores) y, dentro de la capa que recibe las peticiones HTTP, apliqué también el patrón MVC. La idea de hexagonal es que el dominio (o sea, las reglas de negocio) no dependa de Spring ni de JPA ni de nada de eso. El core no sabe que existe una base de datos: solo declara qué necesita (eso es un puerto), y quien se encarga de conectarse a la base de datos real es un adaptador aparte.
 
 El proyecto quedó dividido en tres capas principales:
 
 - **`core`**: es el dominio. Acá están los modelos de negocio (`Pokemon`, `PokemonStats`), los servicios con la lógica (`PokemonService`, `AuthService`, `FavoritoService`, `TeamService`) y los puertos, que son interfaces que dicen qué necesita el dominio sin decir cómo se hace (`PokemonPersistencePort`). En este paquete no hay nada de JPA ni de Mongo importado directamente.
 
-- **`persistence`**: son los adaptadores de salida. Acá implementamos los puertos usando JPA (`PokemonPersistenceAdapter`) y convertimos entre las entidades de la base de datos (`PokemonEntity`, `UserEntity`, etc.) y los modelos del dominio, usando mappers. También está la entidad de MongoDB (`PokemonViewDocument`).
+- **`persistence`**: son los adaptadores de salida. Acá implementé los puertos usando JPA (`PokemonPersistenceAdapter`), que convierte entre las entidades de la base de datos (`PokemonEntity`, `UserEntity`, etc.) y los modelos del dominio, usando mappers. También está la entidad de MongoDB (`PokemonViewDocument`).
 
 - **`controller`**: son los adaptadores de entrada, la parte que expone la API REST. Cada recurso tiene una interfaz (`PokemonApi`, `AuthApi`, `FavoritoApi`, `TeamApi`) que define el contrato con las anotaciones de Swagger, y una clase que la implementa (`PokemonController`, etc.). Acá es donde entra el MVC: el *Controller* recibe la petición, llama al *Service* (que sería el *Model*) y devuelve un DTO en JSON. No hay *Vista* como tal porque esto es una API y no una app con HTML — la "vista" la pone el prototipo de Figma, que es quien consume esta API.
 
