@@ -56,10 +56,14 @@ public class SecurityConfig {
                         .defaultAuthenticationEntryPointFor(
                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                                 request -> request.getRequestURI().startsWith("/v1/")
+                                        || request.getRequestURI().startsWith("/actuator/")
+                                        || request.getRequestURI().equals("/error")
                         )
                         .defaultAccessDeniedHandlerFor(
                                 (request, response, accessDeniedException) -> response.setStatus(HttpStatus.FORBIDDEN.value()),
                                 request -> request.getRequestURI().startsWith("/v1/")
+                                        || request.getRequestURI().startsWith("/actuator/")
+                                        || request.getRequestURI().equals("/error")
                         )
                 )
                 .oauth2Login(o -> o.successHandler(oAuth2SuccessHandler))
