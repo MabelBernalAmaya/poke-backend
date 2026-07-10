@@ -84,15 +84,15 @@ Estos son los diagramas exportados como imagen (armados en Lucidchart y Mermaid)
 
 ### Diagrama de clases
 
-![Diagrama de clases](docs/diagramas/diagrama-clases.png)
+![Diagrama de clases](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama-clases.png)
 
 ### Diagrama de componentes general
 
-![Diagrama de componentes general](docs/diagramas/componentes-general.png)
+![Diagrama de componentes general](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-general.png)
 
 ### Diagrama de componentes específico
 
-![Diagrama de componentes específico](docs/diagramas/componentes-especifico.png)
+![Diagrama de componentes específico](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-especifico.png)
 
 ### Diagramas de casos de uso
 
@@ -100,15 +100,15 @@ Uno por cada tipo de usuario, para que se entienda más claro qué puede hacer c
 
 **Visitante**
 
-![Caso de uso - Visitante](docs/diagramas/casos-de-uso-visitante.png)
+![Caso de uso - Visitante](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/Diagrama%20visitante.png)
 
 **Entrenador autenticado**
 
-![Caso de uso - Entrenador autenticado](docs/diagramas/casos-de-uso-entrenador.png)
+![Caso de uso - Entrenador autenticado](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama%20entrenador.png)
 
 **Administrador**
 
-![Caso de uso - Administrador](docs/diagramas/casos-de-uso-administrador.png)
+![Caso de uso - Administrador](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama%20admin.png)
 
 > El diagrama C4 se documenta en el otro repositorio (el del prototipo / manual de identidad), junto con el resto de artefactos de diseño.
 
