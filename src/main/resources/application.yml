@@ -1,6 +1,10 @@
 server:
   port: ${PORT:8080}
   forward-headers-strategy: framework
+  tomcat:
+    threads:
+      max: 50
+      min-spare: 5
 
 spring:
   application:
@@ -15,6 +19,8 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:pokeuser}
     password: ${SPRING_DATASOURCE_PASSWORD:pokepassword}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
