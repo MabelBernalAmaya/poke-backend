@@ -80,7 +80,7 @@ com.pokepedia.pokecore
 
 ## Diagramas
 
-Estos son los diagramas exportados como imagen (armados en Lucidchart y Mermaid):
+Estos son los diagramas exportados como imagen (armados en Lucidchart y ):
 
 ### Diagrama de clases
 
