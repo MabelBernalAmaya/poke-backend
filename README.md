@@ -88,17 +88,23 @@ Clases principales del módulo Pokémon (Controller → Service → Puerto → A
 
 ![Diagrama de clases](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama-clases.png)
 
+Acá se ve la cadena completa del módulo Pokémon: `PokemonController` usa `PokemonService`, `PokemonServiceImpl` implementa esa interfaz (realización, flecha con triángulo hueco) y a su vez usa el puerto `PokemonPersistencePort`, que `PokemonPersistenceAdapter` implementa para hablar con `PokemonEntity` en la base de datos. También quedan las clases de `Pokemon` y `PokemonStats` (el modelo de dominio) y cómo se relacionan con `UserEntity`, `EquipoEntity` y `FavoritoEntity`, que son las que soportan equipos y favoritos.
+
 ### Diagrama de componentes general
 
 Vista de alto nivel: cómo se conectan el cliente, las capas del backend (Controller, Core, Persistencia, Seguridad) y la infraestructura externa (PostgreSQL, MongoDB, Google OAuth2).
 
 ![Diagrama de componentes general](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-general.png)
 
+Este es el panorama completo desde afuera: el cliente (Swagger o el prototipo del frontend) le pega al backend, que por dentro está dividido en las capas que mencioné en la sección de arquitectura (Controller, Core, Persistencia y Security). De ahí para afuera, el backend se conecta a la infraestructura externa: PostgreSQL para los datos relacionales, MongoDB para las vistas de Pokémon, y Google OAuth2 para el login. La idea de este diagrama es mostrar que el backend es el único que le habla directamente a esos tres servicios externos.
+
 ### Diagrama de componentes específico
 
 Detalle interno de los 4 módulos funcionales (Pokémon, Auth, Favoritos, Teams) y la única dependencia entre ellos: Teams necesita los datos de Pokémon para exportar un equipo a texto.
 
 ![Diagrama de componentes específico](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-especifico.png)
+
+Acá ya entro al detalle de adentro del backend, módulo por módulo: Pokémon, Auth, Favoritos y Teams, cada uno con su Controller, su Service y su capa de persistencia. Casi todos son independientes entre sí, menos Teams, que sí necesita pedirle datos a Pokémon para poder armar el equipo y exportarlo a texto (por eso es la única flecha que cruza entre módulos). Esto refuerza lo que expliqué en arquitectura: solo Pokémon tiene puerto/adaptador completo, los demás usan su repositorio de JPA directo.
 
 ### Diagramas de casos de uso
 
@@ -108,13 +114,19 @@ Uno por cada tipo de usuario, para que se entienda más claro qué puede hacer c
 
 ![Caso de uso - Visitante](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/Diagrama%20visitante.png)
 
+El visitante es cualquiera que entra sin loguearse. Solo puede hacer operaciones de lectura sobre el catálogo: ver el listado de Pokémon, buscar por nombre o id, filtrar (simple y avanzado) y comparar dos Pokémon. No tiene acceso a favoritos, equipos ni nada que necesite una cuenta.
+
 **Entrenador autenticado**
 
 ![Caso de uso - Entrenador autenticado](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama%20entrenador.png)
 
+El entrenador es el usuario ya logueado (con email/password o con Google), rol `TRAINER` por defecto. Además de todo lo que puede hacer el visitante, puede agregar y quitar favoritos, y crear, editar, eliminar y exportar sus propios equipos en el Team Builder. Lo que no puede es tocar el catálogo de Pokémon (crear/editar/eliminar un Pokémon), porque esos endpoints están protegidos para ADMIN.
+
 **Administrador**
 
 ![Caso de uso - Administrador](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama%20admin.png)
+
+El administrador tiene todo lo del entrenador, más los casos de uso exclusivos de gestión del catálogo: crear, editar y eliminar Pokémon. Es el único rol que puede modificar los datos que ven todos los demás usuarios.
 
 > El diagrama C4 se documenta en el otro repositorio (el del prototipo / manual de identidad), junto con el resto de artefactos de diseño.
 
