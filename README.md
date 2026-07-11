@@ -84,13 +84,19 @@ Estos son los diagramas exportados como imagen (armados en Lucidchart y Mermaid)
 
 ### Diagrama de clases
 
+Clases principales del módulo Pokémon (Controller → Service → Puerto → Adaptador → Entidad) y las relaciones del modelo de datos con usuarios, equipos y favoritos.
+
 ![Diagrama de clases](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/diagrama-clases.png)
 
 ### Diagrama de componentes general
 
+Vista de alto nivel: cómo se conectan el cliente, las capas del backend (Controller, Core, Persistencia, Seguridad) y la infraestructura externa (PostgreSQL, MongoDB, Google OAuth2).
+
 ![Diagrama de componentes general](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-general.png)
 
 ### Diagrama de componentes específico
+
+Detalle interno de los 4 módulos funcionales (Pokémon, Auth, Favoritos, Teams) y la única dependencia entre ellos: Teams necesita los datos de Pokémon para exportar un equipo a texto.
 
 ![Diagrama de componentes específico](https://github.com/MabelBernalAmaya/poke-backend/blob/main/docs/diagramas/componentes-especifico.png)
 
